@@ -16,10 +16,14 @@ public class Player : MonoBehaviour
     public Animator anime;
     public bool Infected;
 
+    public bool jump = false;
+    public bool right = false;
+    public bool left = false;
+    public bool isMoving;
+
     private ContagionProgressController contagionProgressController;
     private CharacterController controller;
     private float jumpVelocity;
-    private bool isMoving;
     private GameController gameController;
     private BuffController buffController;
 
@@ -44,19 +48,22 @@ public class Player : MonoBehaviour
             
             if(this.controller.isGrounded) 
             {
-                if(Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+                if(jump)
                 {
+                    jump = false;
                     this.jumpVelocity = this.jumpHeight;
                 }
 
-                if (Input.GetKeyDown(KeyCode.RightArrow) && this.transform.position.x < playerLimit && !this.isMoving)
+                if (right && this.transform.position.x < playerLimit && !this.isMoving)
                 {
+                    right = false;
                     this.isMoving = true;
                     StartCoroutine(RightMove());
                 }
 
-                if (Input.GetKeyDown(KeyCode.LeftArrow) && this.transform.position.x > -playerLimit && !this.isMoving)
+                if (left && this.transform.position.x > -playerLimit && !this.isMoving)
                 {
+                    left = false;
                     this.isMoving = true;
                     StartCoroutine(LeftMove());
                 }
@@ -89,7 +96,7 @@ public class Player : MonoBehaviour
             }
         }        
         this.normalize();
-        this.isMoving = false;        
+        this.isMoving = false;
     }
 
     IEnumerator RightMove()

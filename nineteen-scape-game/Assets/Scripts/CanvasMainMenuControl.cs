@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,15 +11,26 @@ public class CanvasMainMenuControl : MonoBehaviour
     private GameObject CanvasInformation;
     private GameObject CanvasRanking;
 
+    private CloudScore cloudScore;
+
+    public Text UsernameInput;
+    public List<Text> RankList;
+
     void Start()
     {
         CanvasMainMenu = GameObject.Find("CanvasMainMenu").gameObject;
         CanvasInformation = GameObject.Find("CanvasInformation").gameObject;
         CanvasRanking = GameObject.Find("CanvasRanking").gameObject;
+        
+        cloudScore = FindObjectOfType<CloudScore>();
 
         CanvasMainMenu.SetActive(true);
         CanvasInformation.SetActive(false);
         CanvasRanking.SetActive(false);
+        UsernameInput.text = CloudScore.Username;
+
+        populateRankList();
+
     }
 
     public void PlayButton()
@@ -49,6 +61,7 @@ public class CanvasMainMenuControl : MonoBehaviour
 
     public void SaveButton()
     {
+        CloudScore.Username = UsernameInput.text;
         CanvasMainMenu.SetActive(true);
         CanvasInformation.SetActive(false);
         CanvasRanking.SetActive(false);
@@ -58,4 +71,22 @@ public class CanvasMainMenuControl : MonoBehaviour
     {
         Application.Quit();
     }
+
+    private void populateRankList()
+    {
+        cloudScore.GetRanking(ranking => {
+            for (var i = 0; i < ranking.Count; i++)
+            {
+                var score = ranking[i];
+                var text = RankList[i];
+
+                text.text = "0" + (i + 1) + " - " + score.username + " - " + score.score;
+            }
+            for (var i = ranking.Count; i < RankList.Count; i++)
+            {
+                RankList[i].text = "";
+            }
+        });
+    }
+
 }

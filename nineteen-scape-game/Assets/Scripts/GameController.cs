@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.Diagnostics;
 
 public class GameController : MonoBehaviour
 {
     public float score;
     public float speedIncreaseRate;
     public float horizontalSpeedIncreaseRate;
+    public int bossDisplayRate;
 
+    public Alert alert;
     public List<GameObject> randomObjects = new List<GameObject>();
     public List<int> randomObjectsProbabilities = new List<int>();
     public GameObject gameOver;
@@ -17,7 +20,10 @@ public class GameController : MonoBehaviour
     public Text gameOverScoreText;
     public bool playerDie = false;
     public bool isStopped = false;
+    public bool bossActivated;
+    public BossController boss;
 
+    private CloudScore cloudScore;
     private Player player;
     private float time;
 
@@ -38,6 +44,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        this.cloudScore = FindObjectOfType<CloudScore>();
         this.player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         this.validateRandomObjectsProbabilities();
     }
@@ -46,16 +53,41 @@ public class GameController : MonoBehaviour
     {
         if(!this.playerDie && !this.isStopped)
         {
-            this.score += Time.deltaTime * 5f;
-            this.scoreText.text = Mathf.Round(this.score).ToString() + "m";
-            this.player.speed += this.speedIncreaseRate;
-            this.player.horizontalSpeed += this.horizontalSpeedIncreaseRate;
-            this.createRandomObjectInScene();
+            if (player.Infected)
+            {
+                this.player.jumpHeight = 0f;
+                if (player.speed > 0)
+                {
+                    this.player.speed -= this.speedIncreaseRate * 5f;
+                    this.player.horizontalSpeed -= this.horizontalSpeedIncreaseRate * 5f;
+                    this.alert.Show("AlterChloroquine");
+                }
+            }
+            else
+            {
+                this.player.speed += this.speedIncreaseRate;
+                this.player.horizontalSpeed += this.horizontalSpeedIncreaseRate;
+                this.score += Time.deltaTime * 5f;
+                this.scoreText.text = Mathf.Round(this.score).ToString() + "m";
+            }
+
+            if (!bossActivated)
+            {
+                if (score > 1f && Mathf.Round(score) % bossDisplayRate == 0)
+                {
+                    this.initializeBoss();
+                } 
+                else
+                {
+                    this.createRandomObjectInScene();
+                }
+            }
         }
     }
 
     public void CallGameOver()
     {
+        this.cloudScore.SaveScore((int)Mathf.Round(this.score));
         this.gameOverScoreText.text = string.Format("Atingido {0}m", Mathf.Round(this.score));
         this.gameOver.SetActive(true);
     }
@@ -119,5 +151,20 @@ public class GameController : MonoBehaviour
         {
             throw new System.ArgumentException("Random Objects Probabilities should have sum equal to 100");
         }
+    }
+
+    private void initializeBoss()
+    {
+        this.alert.Show("CallBoss");
+        this.bossActivated = true;
+        Invoke("CallBoss", 2f);
+    }
+
+    private void CallBoss()
+    {
+        var x = this.player.transform.position.x;
+        var y = this.boss.transform.position.y;
+        var z = this.player.transform.position.z + 120f;
+        Instantiate(this.boss, new Vector3(x, y, z), this.boss.transform.rotation);
     }
 }

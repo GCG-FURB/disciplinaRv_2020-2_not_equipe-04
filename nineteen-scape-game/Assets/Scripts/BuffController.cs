@@ -43,9 +43,11 @@ public class BuffController : MonoBehaviour
     public GameObject PillAlert;
     public Text MaskUI;
     public Player Player;
+    public Alert alert;
 
     /* variable of interaction with the buttons */
     public int CurrentPillAction = 0;
+    public bool IsWaitingForPillAction = false;
 
     public enum E_BUFF {Mask, Pill};
     private Dictionary<string, Buff> buffDictionary = new Dictionary<string, Buff>();
@@ -101,6 +103,7 @@ public class BuffController : MonoBehaviour
         switch (type)
         {
             case E_BUFF.Mask:
+                this.alert.Show("AlterMaskAntiCovid");
                 this.Decrement(type);
                 return 0;
 
@@ -126,6 +129,7 @@ public class BuffController : MonoBehaviour
 
     IEnumerator WaitForPillAction()
     {
+        IsWaitingForPillAction = true;
         while(this.CurrentPillAction == 0)
         {
             yield return null;
@@ -140,21 +144,36 @@ public class BuffController : MonoBehaviour
         }        
 
         this.CurrentPillAction = 0;
+        IsWaitingForPillAction = false;
     }
 
     private void RandomPillAction()
     {
         this.Decrement(E_BUFF.Pill);
         this.Player.Revive();
+        
         int isHealed = UnityEngine.Random.Range(0, 2);
         if (isHealed == 0) 
         {
+            this.Player.Infected = true;
             StartCoroutine(PillFailure());
         }
+        else
+        {
+            this.alert.Show("SaveByChloroquine");
+        }
     }
-    
+
     IEnumerator PillFailure()
     {
-        yield return null;
+        int i = 10;
+        while(i > 5)
+        {
+            i--;
+            yield return new WaitForSeconds(1);
+        }
+
+        this.Player.StopRunning();
+        this.Player.Die();
     }
 }

@@ -5,38 +5,63 @@ using UnityEngine.UI;
 
 public class Alert : MonoBehaviour
 {
-    public RawImage Image;
-    public Text SuccessfulAlertUseMask;
+    public GameController gameController;
+    public List<string> ImageTags;
+    public Dictionary<string, RawImage> imageDict;
+    public int ShownTime;
+    
+    private bool isExecuting;
 
-    public void AnimateMask(bool fadeIn)
+    void Start()
     {
-        if (fadeIn) 
+        this.imageDict = new Dictionary<string, RawImage>();
+        foreach (var imageTag in this.ImageTags)
         {
-            StartCoroutine(FadeIn(SuccessfulAlertUseMask));    
+            this.imageDict.Add(imageTag, GameObject.FindGameObjectWithTag(imageTag).GetComponent<RawImage>());
         }
-        else
-        {
-            StartCoroutine(FadeOut(SuccessfulAlertUseMask));    
-        }   
+        this.isExecuting = false;
     }
 
-    IEnumerator FadeIn(Text textAnimate) 
+    public void Show(string key)
     {
-        for (float i = 0; i <= 1; i += Time.deltaTime)
+        if (!isExecuting)
         {
-            this.Image.color = new Color(this.Image.color.r, this.Image.color.g, this.Image.color.b, i);
-            textAnimate.color = new Color(textAnimate.color.r, textAnimate.color.g, textAnimate.color.b, i);
+            StartCoroutine(FadeIn(key));
+        }
+    }
+
+    IEnumerator FadeIn(string key) 
+    {
+        isExecuting = true;
+        
+        var rawImage = imageDict[key];
+        
+        var r = rawImage.color.r;
+        var g = rawImage.color.g;
+        var b = rawImage.color.b;
+
+        for (float i = 0; (i <= 1 && shouldContinue()); i += Time.deltaTime)
+        {
+            rawImage.color = new Color(r, g, b, i);
             yield return null;
         }
-    }
 
-    IEnumerator FadeOut(Text textAnimate) 
-    {
-        for (float i = 1; i >= 0; i -= Time.deltaTime)
+        yield return new WaitForSeconds(ShownTime);
+
+        for (float i = 1; (i >= 0 && shouldContinue()); i -= Time.deltaTime)
         {
-            this.Image.color = new Color(this.Image.color.r, this.Image.color.g, this.Image.color.b, i);
-            textAnimate.color = new Color(textAnimate.color.r, textAnimate.color.g, textAnimate.color.b, i);
+            rawImage.color = new Color(r, g, b, i);
             yield return null;
         }
+
+        rawImage.color = new Color(r, g, b, 0);
+
+        isExecuting = false;
     }
+
+    private bool shouldContinue()
+    {
+        return !this.gameController.playerDie && !this.gameController.isStopped;
+    }
+
 }

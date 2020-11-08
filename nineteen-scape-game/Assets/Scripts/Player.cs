@@ -11,9 +11,12 @@ public class Player : MonoBehaviour
     public float jumpHeight;
     public float gravity;
     public float rayRadius;
-    public LayerMask layer;
+    public LayerMask adversariesLayer;
+    public LayerMask bossLayer;
     public Animator anime;
+    public bool Infected;
 
+    private ContagionProgressController contagionProgressController;
     private CharacterController controller;
     private float jumpVelocity;
     private bool isMoving;
@@ -26,6 +29,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        this.contagionProgressController = FindObjectOfType<ContagionProgressController>();
         this.controller = GetComponent<CharacterController>();
         this.gameController = FindObjectOfType<GameController>();
         this.buffController = FindObjectOfType<BuffController>();
@@ -129,10 +133,19 @@ public class Player : MonoBehaviour
     {
         RaycastHit hit;
 
-        if(Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward), out hit, this.rayRadius, this.layer) && !this.gameController.playerDie)
+        if (Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward), out hit, this.rayRadius, this.adversariesLayer) && !this.gameController.playerDie)
         {
             hit.collider.gameObject.GetComponent<Adversaries>().Die();
-            this.ValidatePlayerBuff();
+            if (!this.Infected && this.contagionProgressController.RandomizedInfection())
+            {
+                this.ValidatePlayerBuff();
+            }
+        }
+
+        if (Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward), out hit, this.rayRadius, this.bossLayer) && !this.gameController.playerDie)
+        {
+            this.StopRunning();
+            this.Die2();
         }
     }
 
@@ -147,13 +160,21 @@ public class Player : MonoBehaviour
                 this.Die();
             }
         }
-        
+
     }
 
     public void Die()
     {
         this.gameController.playerDie = true;
         this.anime.SetTrigger("Death_player_b");
+        this.anime.SetTrigger("Death_b");
+        Invoke("GameOverAlert", 3f);
+    }
+
+    public void Die2()
+    {
+        this.gameController.playerDie = true;
+        this.anime.ResetTrigger("Death_player_b");
         this.anime.SetTrigger("Death_b");
         Invoke("GameOverAlert", 3f);
     }
@@ -172,7 +193,7 @@ public class Player : MonoBehaviour
         this.gameController.CallGameOver();
     }
 
-    private void StopRunning() 
+    public void StopRunning() 
     {
         this.gameController.isStopped = true;
         this.currentSpeed = this.speed;

@@ -6,12 +6,15 @@ public class Adversaries : MonoBehaviour
 {
     public Animator anime;
     private GameController gameController;
+    private Player player;
 
     void Start()
     {
         this.transform.Rotate(0f, 180f, 0f);
         this.transform.position += new Vector3(0f, 0.3f, 0f);
         this.gameController = FindObjectOfType<GameController>();
+        this.player = FindObjectOfType<Player>();
+        // speeds
     }
 
     void Update()
@@ -46,9 +49,9 @@ public class Adversaries : MonoBehaviour
     {
         for (int i = 0; i < 45; i++)
         {
-          this.transform.position += new Vector3(-0.025f, 0f, 0f);
-          this.transform.Rotate(0f, -1f, 0f);   
-          yield return null;  
+            this.transform.position += new Vector3(-0.025f, 0f, 0.03f * (player.speed < 10f ? (player.speed * 1.5f) : player.speed));
+            this.transform.Rotate(0f, -1f, 0f);   
+            yield return null;  
         }
     }
 }

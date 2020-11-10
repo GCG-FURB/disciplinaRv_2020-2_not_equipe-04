@@ -210,7 +210,7 @@ MonoBehaviour:
   score: 0
   speedIncreaseRate: 0.005
   horizontalSpeedIncreaseRate: 0.0005
-  bossDisplayRate: 50
+  bossDisplayRate: 180
   alert: {fileID: 1868978374}
   randomObjects:
   - {fileID: 100000, guid: 2f8d00bf5057f624e949aef802595da9, type: 3}
@@ -284,7 +284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InfectionFreeMessage: PEDESTRE SAUDAVEL
   InfectionFreeMessageTime: 3
-  RandomizationScoreInterval: 50
+  RandomizationScoreInterval: 45
 --- !u!4 &42620894
 Transform:
   m_ObjectHideFlags: 0

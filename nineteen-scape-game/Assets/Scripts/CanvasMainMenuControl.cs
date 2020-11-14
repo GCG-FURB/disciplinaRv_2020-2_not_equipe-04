@@ -7,26 +7,29 @@ using UnityEngine.UI;
 
 public class CanvasMainMenuControl : MonoBehaviour
 {
-    private GameObject CanvasMainMenu;
-    private GameObject CanvasInformation;
-    private GameObject CanvasRanking;
-
-    private CloudScore cloudScore;
-
-    public Text UsernameInput;
+    public GameObject CanvasMainMenu;
+    public GameObject CanvasInformation;
+    public GameObject CanvasUsername;
+    public GameObject CanvasRanking;
+    public CloudScore cloudScore;
+    public InputField UsernameInput;
     public List<Text> RankList;
 
     void Start()
     {
-        CanvasMainMenu = GameObject.Find("CanvasMainMenu").gameObject;
-        CanvasInformation = GameObject.Find("CanvasInformation").gameObject;
-        CanvasRanking = GameObject.Find("CanvasRanking").gameObject;
-        
-        cloudScore = FindObjectOfType<CloudScore>();
-
-        CanvasMainMenu.SetActive(true);
+        if (string.IsNullOrWhiteSpace(CloudScore.Username))
+        {
+            CanvasUsername.SetActive(true);
+            CanvasMainMenu.SetActive(false);
+        }
+        else
+        {
+            CanvasUsername.SetActive(false);
+            CanvasMainMenu.SetActive(true);
+        }
         CanvasInformation.SetActive(false);
         CanvasRanking.SetActive(false);
+        
         UsernameInput.text = CloudScore.Username;
 
         populateRankList();
@@ -35,12 +38,13 @@ public class CanvasMainMenuControl : MonoBehaviour
 
     public void PlayButton()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("GameScene");
     }
 
     public void InformationButton()
     {
         CanvasMainMenu.SetActive(false);
+        CanvasUsername.SetActive(false);
         CanvasInformation.SetActive(true);
         CanvasRanking.SetActive(false);
     }
@@ -48,6 +52,7 @@ public class CanvasMainMenuControl : MonoBehaviour
     public void RankingButton()
     {
         CanvasMainMenu.SetActive(false);
+        CanvasUsername.SetActive(false);
         CanvasInformation.SetActive(false);
         CanvasRanking.SetActive(true);
     }
@@ -55,6 +60,7 @@ public class CanvasMainMenuControl : MonoBehaviour
     public void BackButton()
     {
         CanvasMainMenu.SetActive(true);
+        CanvasUsername.SetActive(false);
         CanvasInformation.SetActive(false);
         CanvasRanking.SetActive(false);
     }
@@ -63,6 +69,7 @@ public class CanvasMainMenuControl : MonoBehaviour
     {
         CloudScore.Username = UsernameInput.text;
         CanvasMainMenu.SetActive(true);
+        CanvasUsername.SetActive(false);
         CanvasInformation.SetActive(false);
         CanvasRanking.SetActive(false);
     }

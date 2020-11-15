@@ -15,15 +15,21 @@ public class CanvasMainMenuControl : MonoBehaviour
     public InputField UsernameInput;
     public List<Text> RankList;
 
+    public VoiceRecognition VoiceRecognition;
+    public Button UsernameSaveButton;
+    public Button UsernameRemakeButton;
+
     void Start()
     {
         if (string.IsNullOrWhiteSpace(CloudScore.Username))
         {
+            this.VoiceRecognition.recognitionEnabled = true;
             CanvasUsername.SetActive(true);
             CanvasMainMenu.SetActive(false);
         }
         else
         {
+            this.VoiceRecognition.recognitionEnabled = false;
             CanvasUsername.SetActive(false);
             CanvasMainMenu.SetActive(true);
         }
@@ -34,6 +40,11 @@ public class CanvasMainMenuControl : MonoBehaviour
 
         populateRankList();
 
+    }
+
+    void Update()
+    {
+        this.ActivationNicknameButtons(this.VoiceRecognition.recognized);
     }
 
     public void PlayButton()
@@ -72,6 +83,13 @@ public class CanvasMainMenuControl : MonoBehaviour
         CanvasUsername.SetActive(false);
         CanvasInformation.SetActive(false);
         CanvasRanking.SetActive(false);
+        this.VoiceRecognition.recognitionEnabled = false;
+    }
+
+    public void RemakeButton()
+    {
+        this.VoiceRecognition.recognized = false;
+        UsernameInput.text = "";
     }
 
     public void QuitButton()
@@ -96,4 +114,9 @@ public class CanvasMainMenuControl : MonoBehaviour
         });
     }
 
+    private void ActivationNicknameButtons(bool enable)
+    {
+        this.UsernameSaveButton.interactable = enable;
+        this.UsernameRemakeButton.interactable = enable;
+    }
 }

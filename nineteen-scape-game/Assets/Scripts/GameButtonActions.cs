@@ -25,7 +25,7 @@ public class GameButtonActions : MonoBehaviour
 
     public void returnToMenu()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("MenuScene");
     }
 
     public void acceptChloroquine()

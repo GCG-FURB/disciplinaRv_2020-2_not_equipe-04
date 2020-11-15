@@ -98,8 +98,6 @@ public class BuffController : MonoBehaviour
 
     private int Action(E_BUFF type)
     {
-        Debug.Log(type.ToString() + " Action");
-
         switch (type)
         {
             case E_BUFF.Mask:

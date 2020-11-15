@@ -56,6 +56,7 @@ public class GvrPointerGraphicRaycaster : GvrBasePointerRaycaster
     /// </summary>
     protected GvrPointerGraphicRaycaster()
     {
+        Debug.Log("GvrPointerGraphicRaycaster");
     }
 
     /// <summary>Types of blocking objects this object's raycasts can hit.</summary>

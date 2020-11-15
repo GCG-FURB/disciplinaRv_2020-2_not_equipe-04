@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
     public float rayRadius;
     public LayerMask adversariesLayer;
     public LayerMask bossLayer;
-    public Animator anime;
     public bool Infected;
 
     public bool jump = false;
@@ -43,7 +42,6 @@ public class Player : MonoBehaviour
     {
         if (!this.gameController.isStopped) 
         {
-            this.anime.ResetTrigger("Stop_b");
             Vector3 direction = Vector3.forward * speed;   
             
             if(this.controller.isGrounded) 
@@ -76,10 +74,6 @@ public class Player : MonoBehaviour
             this.OnCollision();
             direction.y = this.jumpVelocity;
             this.controller.Move(direction * Time.deltaTime);
-        } 
-        else
-        {
-            this.anime.SetTrigger("Stop_b");
         }
     }
 
@@ -152,7 +146,7 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(this.transform.position, this.transform.TransformDirection(Vector3.forward), out hit, this.rayRadius, this.bossLayer) && !this.gameController.playerDie)
         {
             this.StopRunning();
-            this.Die2();
+            this.Die();
         }
     }
 
@@ -173,16 +167,6 @@ public class Player : MonoBehaviour
     public void Die()
     {
         this.gameController.playerDie = true;
-        this.anime.SetTrigger("Death_player_b");
-        this.anime.SetTrigger("Death_b");
-        Invoke("GameOverAlert", 3f);
-    }
-
-    public void Die2()
-    {
-        this.gameController.playerDie = true;
-        this.anime.ResetTrigger("Death_player_b");
-        this.anime.SetTrigger("Death_b");
         Invoke("GameOverAlert", 3f);
     }
 

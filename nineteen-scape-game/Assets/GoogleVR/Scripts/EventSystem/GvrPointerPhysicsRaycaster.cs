@@ -70,6 +70,7 @@ public class GvrPointerPhysicsRaycaster : GvrBasePointerRaycaster
     /// </summary>
     protected GvrPointerPhysicsRaycaster()
     {
+        Debug.Log("GvrPointerPhysicsRaycaster");
     }
 
     /// <summary>

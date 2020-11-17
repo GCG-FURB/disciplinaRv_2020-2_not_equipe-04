@@ -39,6 +39,7 @@ public class BuffController : MonoBehaviour
     }
     
     /* game objects to control ui texts */
+    public GameController GameController;
     public Text PillUI;
     public GameObject PillAlert;
     public Text MaskUI;
@@ -107,6 +108,7 @@ public class BuffController : MonoBehaviour
 
             case E_BUFF.Pill:
                 this.PillAlert.SetActive(true);
+                GameController.RepositionCanvas();
                 StartCoroutine(WaitForPillAction());
                 return 1;
 

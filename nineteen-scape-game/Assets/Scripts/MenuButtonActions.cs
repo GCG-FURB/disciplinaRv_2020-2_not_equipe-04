@@ -5,20 +5,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameButtonActions : MonoBehaviour
+public class MenuButtonActions : MonoBehaviour
 {
-    public BuffController BuffController;
-    public GameController GameController;
     public Image SelectionCircle;
     public float SelectionTimer;
+    public CanvasMainMenuControl CanvasMainMenuControl;
     
     
     private float accSelectionTime;
     private Action action;
     private bool isCounterActive;
 
-    private static GameButtonActions _instance;
-    public static GameButtonActions Instance { get { return _instance; } }
+    private static MenuButtonActions _instance;
+    public static MenuButtonActions Instance { get { return _instance; } }
     
     private void Awake()
     {
@@ -38,7 +37,6 @@ public class GameButtonActions : MonoBehaviour
         if (this.isCounterActive)
         {
             accSelectionTime += Time.deltaTime;
-            GameController.RepositionCanvas();
             if (accSelectionTime < SelectionTimer)
             {
                 SelectionCircle.fillAmount = accSelectionTime / SelectionTimer;
@@ -51,30 +49,45 @@ public class GameButtonActions : MonoBehaviour
         }
     }
 
-    public void returnToMenu()
+    public void StartPlayButtonCounter()
     {
-        SceneManager.LoadScene("MenuScene");
-    }
-
-    public void acceptChloroquine()
-    {
-        this.BuffController.CurrentPillAction = 1;
-    }
-
-    public void refuseChloroquine()
-    {
-        this.BuffController.CurrentPillAction = 2;
-    }
-
-    public void StartReturnToMenuCounter()
-    {
-        this.action = () => SceneManager.LoadScene("MenuScene");
+        this.action = () => CanvasMainMenuControl.PlayButton();
         this.isCounterActive = true;
     }
 
-    public void StartPillActionCounter(int pillAction)
+    public void StartInformationButtonCounter()
     {
-        this.action = () => BuffController.CurrentPillAction = pillAction;
+        this.action = () => CanvasMainMenuControl.InformationButton();
+        this.isCounterActive = true;
+    }
+
+    public void StartRankingButtonCounter()
+    {
+        this.action = () => CanvasMainMenuControl.RankingButton();
+        this.isCounterActive = true;
+    }
+
+    public void StartBackButtonCounter()
+    {
+        this.action = () => CanvasMainMenuControl.BackButton();
+        this.isCounterActive = true;
+    }
+
+    public void StartSaveButtonCounter()
+    {
+        this.action = () => CanvasMainMenuControl.SaveButton();
+        this.isCounterActive = true;
+    }
+
+    public void StartRemakeButtonCounter()
+    {
+        this.action = () => CanvasMainMenuControl.RemakeButton();
+        this.isCounterActive = true;
+    }
+
+    public void StartQuitButtonCounter()
+    {
+        this.action = () => CanvasMainMenuControl.QuitButton();
         this.isCounterActive = true;
     }
 

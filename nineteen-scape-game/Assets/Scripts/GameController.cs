@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
     public int bossDisplayRate;
 
     public Alert alert;
+    public Canvas CanvasInteractive;
     public List<GameObject> randomObjects = new List<GameObject>();
     public List<int> randomObjectsProbabilities = new List<int>();
     public GameObject gameOver;
@@ -89,6 +90,7 @@ public class GameController : MonoBehaviour
     {
         this.cloudScore.SaveScore((int)Mathf.Round(this.score));
         this.gameOverScoreText.text = string.Format("Atingido {0}m", Mathf.Round(this.score));
+        this.RepositionCanvas();
         this.gameOver.SetActive(true);
     }
 
@@ -104,6 +106,11 @@ public class GameController : MonoBehaviour
         {
             this.time += Time.deltaTime * 3f + (this.player.speed / 100);
         }
+    }
+
+    public void RepositionCanvas()
+    {
+        this.CanvasInteractive.transform.position = this.player.transform.position + new Vector3(0f, 0f, 1.3f);
     }
 
     private Vector3 getRandomVector3(int position, float y)

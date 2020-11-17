@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class CanvasMainMenuControl : MonoBehaviour
 {
+    public Camera Camera;
+    public Vector3 CameraDifferenceToMenu;
     public GameObject CanvasMainMenu;
     public GameObject CanvasInformation;
     public GameObject CanvasUsername;
@@ -45,6 +47,7 @@ public class CanvasMainMenuControl : MonoBehaviour
     void Update()
     {
         this.ActivationNicknameButtons(this.VoiceRecognition.recognized);
+        this.updateCameraPosition();
     }
 
     public void PlayButton()
@@ -119,4 +122,10 @@ public class CanvasMainMenuControl : MonoBehaviour
         this.UsernameSaveButton.interactable = enable;
         this.UsernameRemakeButton.interactable = enable;
     }
+
+    private void updateCameraPosition()
+    {
+        this.Camera.transform.parent.transform.position = this.transform.position + CameraDifferenceToMenu;
+    }
+
 }

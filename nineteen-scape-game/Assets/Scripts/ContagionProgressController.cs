@@ -45,7 +45,7 @@ public class ContagionProgressController : MonoBehaviour
             if (Mathf.Round(gameController.score) % RandomizationScoreInterval == 0 && !gameController.playerDie && !buffController.IsWaitingForPillAction && !isAnimatingBar)
             {
                 var oldPercentage = currentPercentage;
-                currentPercentage = random(100, 100);
+                currentPercentage = random(0, 100);
 
                 if (oldPercentage < currentPercentage)
                 {

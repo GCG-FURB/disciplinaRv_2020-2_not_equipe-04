@@ -35,10 +35,10 @@ public class GameButtonActions : MonoBehaviour
 
     void Update()
     {
+        GameController.RepositionCanvas();
         if (this.isCounterActive)
         {
             accSelectionTime += Time.deltaTime;
-            GameController.RepositionCanvas();
             if (accSelectionTime < SelectionTimer)
             {
                 SelectionCircle.fillAmount = accSelectionTime / SelectionTimer;

@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour
     public int bossDisplayRate;
 
     public Alert alert;
+    public Camera Camera;
     public Canvas CanvasInteractive;
     public List<GameObject> randomObjects = new List<GameObject>();
     public List<int> randomObjectsProbabilities = new List<int>();
@@ -52,6 +53,7 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
+        UnityEngine.Debug.Log("camera: " + this.Camera.transform.position.y + "; canvas: " + this.CanvasInteractive.transform.position.y);
         if(!this.playerDie && !this.isStopped)
         {
             if (player.Infected)
@@ -110,7 +112,7 @@ public class GameController : MonoBehaviour
 
     public void RepositionCanvas()
     {
-        this.CanvasInteractive.transform.position = this.player.transform.position + new Vector3(0f, 0f, 1.3f);
+        this.CanvasInteractive.transform.position = this.Camera.transform.position + new Vector3(0f, 0f, 0.4f);
     }
 
     private Vector3 getRandomVector3(int position, float y)

@@ -68,18 +68,21 @@ public class GameButtonActions : MonoBehaviour
 
     public void StartReturnToMenuCounter()
     {
+        Debug.Log("Entrou");
         this.action = () => SceneManager.LoadScene("MenuScene");
         this.isCounterActive = true;
     }
 
     public void StartPillActionCounter(int pillAction)
     {
+        Debug.Log("Entrou");
         this.action = () => BuffController.CurrentPillAction = pillAction;
         this.isCounterActive = true;
     }
 
     public void StopCounter()
     {
+        Debug.Log("Saiu");
         accSelectionTime = 0f;
         SelectionCircle.fillAmount = 0f;
         isCounterActive = false;

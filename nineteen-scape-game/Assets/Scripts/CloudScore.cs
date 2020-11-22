@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Net.Http;
 using System.IO;
-using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 public class CloudScore : MonoBehaviour
 {
@@ -66,8 +66,15 @@ public class CloudScore : MonoBehaviour
 
     public async void GetRanking(Action<List<Score>> rankingAction)
     {
-        string jsonString = await client.GetStringAsync(resource);
-        rankingAction(toScoreList(jsonString));
+        try
+        {
+            string jsonString = await client.GetStringAsync(resource);
+            rankingAction(toScoreList(jsonString));
+        }
+        catch (Exception e)
+        {
+            rankingAction(new List<Score>());
+        }
     }
 
     public async void GetSortedRanking(Action<List<Score>> rankingAction)
@@ -87,10 +94,7 @@ public class CloudScore : MonoBehaviour
     {
         try
         {
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Score>));
-            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
-            List<Score> scoreList = (List<Score>)serializer.ReadObject(ms);
-            ms.Close();
+            var scoreList = JsonConvert.DeserializeObject<dynamic>(json).ToObject<List<Score>>();
             return scoreList == null ? new List<Score>() : scoreList;
         }
         catch
@@ -103,12 +107,7 @@ public class CloudScore : MonoBehaviour
     {
         try
         {
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(List<Score>));
-            MemoryStream ms = new MemoryStream();
-            ser.WriteObject(ms, scoreList);
-            string jsonString = Encoding.UTF8.GetString(ms.ToArray());
-            ms.Close();
-            return jsonString;
+            return JsonConvert.SerializeObject(scoreList);
         }
         catch
         {

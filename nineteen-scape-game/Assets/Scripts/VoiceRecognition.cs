@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Android;
 using IBM.Watson.SpeechToText.V1;
 using IBM.Cloud.SDK;
 using IBM.Cloud.SDK.Authentication;
@@ -38,11 +39,26 @@ public class VoiceRecognition : MonoBehaviour
     public InputField ResultsField;
     public bool recognized = false;
     public bool recognitionEnabled = false;
+    private bool _microphonePermissionAsked;
         
     void Start()
     {
+#if UNITY_ANDROID && !UNITY_EDITOR
+    StartCoroutine(RequestPermissionsRoutine());
+#endif
         LogSystem.InstallDefaultReactors();
         Runnable.Run(CreateService());
+    }
+
+        
+    private IEnumerator RequestPermissionsRoutine()
+    {
+        if (!Permission.HasUserAuthorizedPermission(Permission.Microphone) && !_microphonePermissionAsked)
+        {
+            _microphonePermissionAsked = true;
+            Permission.RequestUserPermission(Permission.Microphone);
+            yield return null;
+        }
     }
 
     private IEnumerator CreateService()

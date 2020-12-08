@@ -212,6 +212,7 @@ MonoBehaviour:
   horizontalSpeedIncreaseRate: 0.0005
   bossDisplayRate: 180
   alert: {fileID: 921076855}
+  Camera: {fileID: 963194227}
   CanvasInteractive: {fileID: 1174167815}
   randomObjects:
   - {fileID: 100000, guid: 2f8d00bf5057f624e949aef802595da9, type: 3}
@@ -1816,7 +1817,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.1036248, z: -0.4002573}
+  m_LocalPosition: {x: 0, y: 2.072, z: -0.4002573}
   m_LocalScale: {x: 1, y: 2.9595387, z: 0.9981436}
   m_Children:
   - {fileID: 1029010080}
@@ -2015,7 +2016,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1029010079}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0.3}
   m_LocalScale: {x: 0.0019245008, y: 0.00065027055, z: 0.0014398327}
   m_Children: []
   m_Father: {fileID: 963194228}
@@ -4367,7 +4368,7 @@ PrefabInstance:
     - target: {fileID: 5520725884281187260, guid: 1d1a65e5dbf415b4ea8bb8c542431ca1,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d1a65e5dbf415b4ea8bb8c542431ca1, type: 3}

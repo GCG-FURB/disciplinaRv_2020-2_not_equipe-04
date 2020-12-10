@@ -1,0 +1,12 @@
+__ Equipe 4 ____
+Nota: 10,0
+x Carlos Henrique Ponciano Da Silva
+x Giulio Giovanella
+x Vinícius Luis da Silva
+Comando de Voz ... não precisar digitar o nome do jogador
+
+RT-Voice: https://assetstore.unity.com/packages/tools/audio/rt-voice-pro-41068
+TCC Caroline
+
+Versões de Build
+Unity Remote - 5
